@@ -1,0 +1,267 @@
+import 'package:flutter/material.dart';
+import 'package:untitled/screen/login_screen.dart'; // login_screen.dart içe aktarılıyor
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Evde Sağlık Takibi',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        useMaterial3: true,
+      ),
+      home: const AnaEkran(),
+    );
+  }
+}
+
+class AnaEkran extends StatefulWidget {
+  const AnaEkran({super.key});
+
+  @override
+  State<AnaEkran> createState() => _AnaEkranState();
+}
+
+class _AnaEkranState extends State<AnaEkran> {
+  String _selectedRole = 'Hasta'; // Varsayılan seçim
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Ana Ekran'),
+        centerTitle: true,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const SizedBox(height: 20),
+            DropdownButtonFormField<String>(
+              value: _selectedRole,
+              items: const [
+                DropdownMenuItem(value: 'Hasta', child: Text('Hasta')),
+                DropdownMenuItem(value: 'Doktor', child: Text('Doktor')),
+              ],
+              decoration: const InputDecoration(
+                labelText: 'Kullanıcı Türü',
+                border: OutlineInputBorder(),
+              ),
+              onChanged: (value) {
+                setState(() {
+                  _selectedRole = value!;
+                });
+              },
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                labelText: 'TC Kimlik Numarası',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              obscureText: true,
+              decoration: const InputDecoration(
+                labelText: 'Şifre',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 32),
+            ElevatedButton(
+              onPressed: () {
+                if (_selectedRole == 'Hasta') {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const MyHomePage()), // Hasta ekranı
+                  );
+                } else if (_selectedRole == 'Doktor') {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const DoktorBosEkran()), // Doktor için boş ekran
+                  );
+                }
+              },
+              child: const Text('Giriş Yap'),
+            ),
+            const SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    // Şifremi unuttum işlemi
+                    print('Şifremi Unuttum tıklandı');
+                  },
+                  child: const Text('Şifremi Unuttum'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    // Yeni kayıt ekranına git
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const YeniKayitEkrani(),
+                      ),
+                    );
+                  },
+                  child: const Text('Yeni Kayıt'),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class YeniKayitEkrani extends StatefulWidget {
+  const YeniKayitEkrani({super.key});
+
+  @override
+  State<YeniKayitEkrani> createState() => _YeniKayitEkraniState();
+}
+
+class _YeniKayitEkraniState extends State<YeniKayitEkrani> {
+  final TextEditingController _isimController = TextEditingController();
+  final TextEditingController _soyisimController = TextEditingController();
+  final TextEditingController _tcController = TextEditingController();
+  final TextEditingController _telController = TextEditingController();
+  final TextEditingController _dogumTarihiController = TextEditingController();
+  final TextEditingController _adresController = TextEditingController();
+  final TextEditingController _sifreController = TextEditingController();
+  final TextEditingController _sifreOnayController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Yeni Kayıt'),
+        centerTitle: true,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              TextField(
+                controller: _isimController,
+                decoration: const InputDecoration(
+                  labelText: 'İsim',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: _soyisimController,
+                decoration: const InputDecoration(
+                  labelText: 'Soyisim',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: _tcController,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  labelText: 'TC Kimlik Numarası',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: _telController,
+                keyboardType: TextInputType.phone,
+                decoration: const InputDecoration(
+                  labelText: 'Telefon',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: _dogumTarihiController,
+                keyboardType: TextInputType.datetime,
+                decoration: const InputDecoration(
+                  labelText: 'Doğum Tarihi',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: _adresController,
+                decoration: const InputDecoration(
+                  labelText: 'Adres',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: _sifreController,
+                obscureText: true,
+                decoration: const InputDecoration(
+                  labelText: 'Şifre',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: _sifreOnayController,
+                obscureText: true,
+                decoration: const InputDecoration(
+                  labelText: 'Şifre Onayı',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 32),
+              ElevatedButton(
+                onPressed: () {
+                  if (_sifreController.text == _sifreOnayController.text) {
+                    print('Kayıt başarılı');
+                    print('İsim: ${_isimController.text}');
+                    print('Soyisim: ${_soyisimController.text}');
+                    print('TC: ${_tcController.text}');
+                    print('Telefon: ${_telController.text}');
+                    print('Doğum Tarihi: ${_dogumTarihiController.text}');
+                    print('Adres: ${_adresController.text}');
+                  } else {
+                    print('Şifreler eşleşmiyor');
+                  }
+                },
+                child: const Text('Kayıt Ol'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// Doktorlar için boş ekran
+class DoktorBosEkran extends StatelessWidget {
+  const DoktorBosEkran({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Doktor Ekranı'),
+      ),
+      body: const Center(
+        child: Text('Doktor için özel ekran şu anda boş.'),
+      ),
+    );
+  }
+}
